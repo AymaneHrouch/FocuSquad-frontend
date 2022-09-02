@@ -1,10 +1,11 @@
-# vue-client
+# StudyBuddies
 
 ## Project setup
+Clone the project and run
 ```
 yarn install
 ```
-
+make sure you edit the API URL at `.env`  
 ### Compiles and hot-reloads for development
 ```
 yarn serve
