@@ -13,6 +13,7 @@ export const useGlobalStore = defineStore('global', () => {
   const showChat = ref(true);
   const showSettings = ref(false);
   const showToast = ref(false);
+  const loading = ref(true);
 
   let toastData = reactive({
     title: '',
@@ -43,6 +44,7 @@ export const useGlobalStore = defineStore('global', () => {
     showSettings,
     showToast,
     toastData,
+    loading,
     toggleChat,
     toggleSettings,
     toast,
