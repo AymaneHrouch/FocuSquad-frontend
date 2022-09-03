@@ -26,18 +26,18 @@
       </div>
     </div>
     <div class="users">
-      <span class="user" v-for="user in data.users">{{ user.username }}</span>
+      <span class="user" v-for="user in data.users">{{ user }}</span>
     </div>
   </div>
 </template>
 
 <script setup>
-import { reactive, onMounted, ref } from 'vue';
+import { reactive, onMounted, ref } from "vue";
 
-import { useGlobalStore } from '@s/global';
-import { useSettingsStore } from '@s/settings';
-import { useTimerStore } from '@s/timer';
-import { formatTime } from '@/utils/formatTime';
+import { useGlobalStore } from "@s/global";
+import { useSettingsStore } from "@s/settings";
+import { useTimerStore } from "@s/timer";
+import { formatTime } from "@/utils/formatTime";
 
 const globalStore = useGlobalStore();
 const settingsStore = useSettingsStore();
@@ -56,7 +56,7 @@ const startSession = async () => {
   timerStore.stopped = false;
 
   tempDuration.value = count.value = settingsStore.session * 60;
-  globalStore.socket.emit('countdown:start', {
+  globalStore.socket.emit("countdown:start", {
     duration: count.value,
     isRest: false,
   });
@@ -68,7 +68,7 @@ const startLongBreak = () => {
   timerStore.stopped = false;
 
   tempDuration.value = count.value = settingsStore.longBreak * 60;
-  globalStore.socket.emit('countdown:start', {
+  globalStore.socket.emit("countdown:start", {
     duration: count.value,
     isRest: true,
   });
@@ -76,7 +76,7 @@ const startLongBreak = () => {
 
 const startShortBreak = () => {
   tempDuration.value = count.value = settingsStore.shortBreak * 60;
-  globalStore.socket.emit('countdown:start', {
+  globalStore.socket.emit("countdown:start", {
     duration: count.value,
     isRest: true,
   });
@@ -85,31 +85,32 @@ const startShortBreak = () => {
 };
 
 const pause = () => {
-  globalStore.socket.emit('countdown:pause', {
+  globalStore.socket.emit("countdown:pause", {
     timeLeft: count.value,
   });
 };
 
 const resume = () => {
   timerStore.paused = false;
-  globalStore.socket.emit('countdown:resume');
+  globalStore.socket.emit("countdown:resume");
 };
 
 const reset = () => {
   timerStore.paused = false;
-  globalStore.socket.emit('countdown:reset');
+  globalStore.socket.emit("countdown:reset");
 };
 
 const stop = () => {
-  globalStore.socket.emit('countdown:stop');
+  globalStore.socket.emit("countdown:stop");
 };
 
 onMounted(() => {
-  globalStore.socket.on('roomUsers', ({ users: newUsers }) => {
+  globalStore.socket.on("roomUsers", ({ users: newUsers }) => {
+    console.log(newUsers);
     data.users = newUsers;
   });
 
-  globalStore.socket.on('countdown:update', ({ count: newCount, rest }) => {
+  globalStore.socket.on("countdown:update", ({ count: newCount, rest }) => {
     timerStore.stopped = false;
     timerStore.paused = false;
     timerStore.resting = rest;
@@ -119,40 +120,41 @@ onMounted(() => {
       // Show toast
       if (timerStore.resting) {
         globalStore.toast({
-          title: 'Break is over',
-          message: 'Got some rest? Time to go back to work!',
+          title: "Break is over",
+          message: "Got some rest? Time to go back to work!",
           buttonLabel: "Let's go!",
         });
       } else {
         globalStore.toast({
-          title: 'Congrats on completing your session!!',
+          title: "Congrats on completing your session!!",
           message:
-            'Take a break, talk to your friends about what you did and what are you planning to do next session.',
-          buttonLabel: 'Take a break',
+            "Take a break, talk to your friends about what you did and what are you planning to do next session.",
+          buttonLabel: "Take a break",
         });
         timerStore.resting = true;
       }
 
       timerStore.stopped = true;
       timerStore.paused = true;
-      document.title = 'Study Buddies';
+      document.title = "Study Buddies";
       playSound();
     }
   });
 
-  globalStore.socket.on('countdown:paused', () => {
+  globalStore.socket.on("countdown:paused", () => {
     timerStore.paused = true;
   });
 
-  globalStore.socket.on('countdown:stopped', () => {
+  globalStore.socket.on("countdown:stopped", () => {
     timerStore.stopped = true;
     timerStore.resting = true;
-    document.title = 'Study Buddies';
+    document.title = "Study Buddies";
   });
 });
 
 const playSound = () => {
-  const audio = new Audio(require('../assets/notification-sound.wav'));
+  const audio = new Audio(require("../assets/notification-sound.wav"));
+  audio.muted = true;
   audio.play();
 };
 </script>
@@ -235,7 +237,7 @@ const playSound = () => {
 }
 
 .user-icon {
-  background-image: url('@/assets/bx-user.svg');
+  background-image: url("@/assets/bx-user.svg");
   background-position: center;
   background-repeat: no-repeat;
   display: inline-block;

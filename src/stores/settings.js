@@ -33,7 +33,6 @@ export const useSettingsStore = defineStore("settings", () => {
     const validation = validate(newUsername, newQuote, newSession, newShortBreak, newLongBreak);
     if (validation.error) return { error: validation.error };
 
-    console.log(session.value, shortBreak.value, longBreak.value);
     // Send setttings to the server
     globalStore.socket.emit("settings:res", {
       username: newUsername.trim(),
