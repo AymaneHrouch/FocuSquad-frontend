@@ -154,7 +154,6 @@ onMounted(() => {
 
 const playSound = () => {
   const audio = new Audio(require("../assets/notification-sound.wav"));
-  audio.muted = true;
   audio.play();
 };
 </script>
