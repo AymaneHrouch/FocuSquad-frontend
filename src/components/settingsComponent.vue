@@ -80,6 +80,7 @@ const submit = () => {
   position: absolute;
   height: 100vh;
   width: 100vw;
+  overflow: hidden;
   z-index: 3;
   display: flex;
   justify-content: center;
