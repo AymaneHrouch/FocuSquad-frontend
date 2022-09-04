@@ -106,7 +106,6 @@ const stop = () => {
 
 onMounted(() => {
   globalStore.socket.on("roomUsers", ({ users: newUsers }) => {
-    console.log(newUsers);
     data.users = newUsers;
   });
 
