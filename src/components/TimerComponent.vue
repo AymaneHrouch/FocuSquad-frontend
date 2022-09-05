@@ -189,7 +189,8 @@ const playSound = () => {
 }
 
 .controls > * {
-  padding: 0.5rem;
+  padding: 0.5rem 0.5rem 0.3rem 0.5rem;
+  border-radius: 1rem;
   width: 100%;
 }
 
@@ -210,6 +211,8 @@ const playSound = () => {
   cursor: pointer;
   transition: all 0.3s ease-in-out;
   font-size: 1.5rem;
+  border-radius: 1rem;
+  transition: all 0.2s ease-in-out;
 }
 
 .timer-options .timer-option:hover {

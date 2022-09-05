@@ -1,28 +1,32 @@
 <template>
-  <ToastComponent />
-  <TogglersComponent />
-  <SettingsComponent />
-  <TimerComponent />
-  <ChatComponent />
+  <UsernameInput v-if="!settingsStore.username" />
+  <template v-else>
+    <ToastComponent />
+    <TogglersComponent />
+    <SettingsComponent />
+    <TimerComponent />
+    <ChatComponent />
+  </template>
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
+import { onMounted } from "vue";
 
-import ToastComponent from './ToastComponent.vue';
-import ChatComponent from '@c/ChatComponent.vue';
-import TimerComponent from '@c/TimerComponent.vue';
-import SettingsComponent from '@c/settingsComponent.vue';
-import TogglersComponent from '@c/TogglersComponent.vue';
+import ToastComponent from "./ToastComponent.vue";
+import ChatComponent from "@c/ChatComponent.vue";
+import TimerComponent from "@c/TimerComponent.vue";
+import SettingsComponent from "@c/settingsComponent.vue";
+import TogglersComponent from "@c/TogglersComponent.vue";
+import UsernameInput from "@c/UsernameInput.vue";
 
-import { useGlobalStore } from '@s/global';
-import { useSettingsStore } from '@s/settings';
+import { useGlobalStore } from "@s/global";
+import { useSettingsStore } from "@s/settings";
 
 const globalStore = useGlobalStore();
 const settingsStore = useSettingsStore();
 
 onMounted(() => {
-  globalStore.socket.on('countdown:state', (state) => {
+  globalStore.socket.on("countdown:state", (state) => {
     timerStore[state] = true;
   });
 
@@ -31,8 +35,8 @@ onMounted(() => {
    * The already connected users send settings:res to the server to sync the settings
    * with new user
    */
-  globalStore.socket.on('settings:req', () => {
-    globalStore.socket.emit('settings:res', {
+  globalStore.socket.on("settings:req", () => {
+    globalStore.socket.emit("settings:res", {
       session: settingsStore.session,
       shortBreak: settingsStore.shortBreak,
       longBreak: settingsStore.longBreak,
@@ -47,7 +51,7 @@ onMounted(() => {
    * Or when a user change the settings using the settings component, the server
    * sends the new settings to all the connected users using settings:update event
    */
-  globalStore.socket.on('settings:update', ({ session, shortBreak, longBreak }) => {
+  globalStore.socket.on("settings:update", ({ session, shortBreak, longBreak }) => {
     // if some settings aren't changed, we keep using the old settings
     settingsStore.session = session || settingsStore.session;
     settingsStore.shortBreak = shortBreak || settingsStore.shortBreak;
@@ -57,15 +61,13 @@ onMounted(() => {
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Anek+Telugu:wght@500&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@500;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Anek+Telugu:wght@500&display=swap");
 
 :root {
   --bg-color: #5a19d3;
   --text-color: #dadada;
-  --primary-color: #d18ce0;
-  --secondary-color: #eeeeee;
+  --primary-color: #c4c4c4;
+  --secondary-color: #dddddd;
   --input-color: #e7c2ef;
 }
 
@@ -81,12 +83,13 @@ input:focus {
 
 input {
   border: none;
+  border-radius: 1rem;
 }
 
 body {
   background-color: var(--bg-color);
   color: var(--text-color);
-  font-family: 'Anek Telugu', sans-serif;
+  font-family: "Anek Telugu", sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -165,12 +168,12 @@ body {
 .btn {
   color: var(--bg-color);
   border: none;
-  border-radius: 0.2rem;
   padding: 0.5rem 1rem;
   cursor: pointer;
   float: left;
   max-width: max-content;
   background-color: #be5ed4;
+  border-radius: 1rem;
   transition: all 0.2s ease-in-out;
 }
 
@@ -180,7 +183,6 @@ body {
   color: #000;
   outline: 2px solid #000;
 }
-
 
 .btn:hover {
   background-color: #be5ed4;

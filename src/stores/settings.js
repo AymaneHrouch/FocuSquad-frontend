@@ -3,15 +3,14 @@ import { ref } from "vue";
 import { useGlobalStore } from "./global";
 
 export const useSettingsStore = defineStore("settings", () => {
-  const username = ref(localStorage.getItem("username") || "Someone");
+  const globalStore = useGlobalStore();
+  const username = ref(localStorage.username || "");
   const quote = ref(
     localStorage.getItem("quote") || "Don't let yesterday take up too much of today."
   );
   const session = ref(25);
   const shortBreak = ref(5);
   const longBreak = ref(20);
-
-  const globalStore = useGlobalStore();
 
   const validate = (username, quote, session, shortBreak, longBreak) => {
     if (!username) return { error: "Please enter a username" };

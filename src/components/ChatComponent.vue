@@ -2,11 +2,10 @@
   <Transition :name="timerStore.computedTransition">
     <div id="chat" v-if="globalStore.showChat && timerStore.resting">
       <main class="chat-main">
-        <div
-          :class="`message message-${message.username ? `incoming` : `outgoing`}`"
-          v-for="message in messages"
-        >
-          <div class="message-sender" v-if="message.username">{{ message.username }}</div>
+        <div :class="messageClass(message)" v-for="message in messages">
+          <div class="message-sender" v-if="message.username && !message.info">
+            {{ message.username }}
+          </div>
           <p
             class="message-text"
             v-for="paragraph in message.text.split(`\n`)"
@@ -39,11 +38,11 @@
 </template>
 
 <script setup>
-import { onMounted, reactive, ref, nextTick } from 'vue';
+import { onMounted, reactive, ref, nextTick } from "vue";
 
-import { useGlobalStore } from '@s/global';
-import { useSettingsStore } from '@s/settings';
-import { useTimerStore } from '@s/timer';
+import { useGlobalStore } from "@s/global";
+import { useSettingsStore } from "@s/settings";
+import { useTimerStore } from "@s/timer";
 
 const globalStore = useGlobalStore();
 const settingsStore = useSettingsStore();
@@ -53,6 +52,16 @@ const messageInput = ref(null);
 
 let messages = reactive([]);
 
+const messageClass = (message) => {
+  if (message.info) {
+    return "message message-info";
+  } else if (message.username) {
+    return "message message-incoming";
+  } else {
+    return "message message-outgoing";
+  }
+};
+
 const handleSubmit = async (e) => {
   if (e) e.preventDefault();
   const newMessage = messageInput.value.value;
@@ -60,7 +69,7 @@ const handleSubmit = async (e) => {
 
   // Format time hh:mm a
   let time = new Date().toLocaleTimeString();
-  time = time.split(':').splice(0, 2).join(':') + ' ' + time.split(' ')[1].toLowerCase();
+  time = time.split(":").splice(0, 2).join(":") + " " + time.split(" ")[1].toLowerCase();
   // Append the message to the messages array
   messages.push({
     text: newMessage,
@@ -71,40 +80,43 @@ const handleSubmit = async (e) => {
   await nextTick();
 
   // Scroll to the bottom of the chat window
-  const chat = document.querySelector('#chat .chat-main');
+  const chat = document.querySelector("#chat .chat-main");
   chat.scrollTo(0, chat.scrollHeight);
 
   // Send message to server
-  globalStore.socket.emit('chatMessage', messageInput.value.value);
+  globalStore.socket.emit("chatMessage", messageInput.value.value);
 
   // Clear the input field
-  messageInput.value.value = '';
+  messageInput.value.value = "";
 };
 
 onMounted(() => {
-  globalStore.socket.emit('joinRoom', {
+  globalStore.socket.emit("joinRoom", {
     username: settingsStore.username,
     room: globalStore.room,
   });
 
-  globalStore.socket.on('message', (msg) => {
+  globalStore.socket.on("message", (msg) => {
     messages.push(msg);
 
     // Scroll to the bottom of the chat
-    const chat = document.querySelector('#chat .chat-main');
+    const chat = document.querySelector("#chat .chat-main");
     chat.scrollTo(0, chat.scrollHeight);
   });
 });
 </script>
 
 <style>
+@import url("https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400&display=swap");
+
 #chat {
   /* background-color: red; */
+  font-family: "Ubuntu", sans-serif;
   padding-top: 1rem;
   width: 40%;
   height: 100%;
-  font-family: 'Hind Siliguri', sans-serif;
-  font-size: 1rem;
+  font-family: sans-serif;
+  font-size: 0.9rem;
   line-height: 1rem;
   letter-spacing: 0px;
   color: #000;
@@ -139,21 +151,33 @@ onMounted(() => {
 
 /** Messages */
 
+.chat-main .message-info {
+  align-self: center;
+  font-size: 0.8rem;
+  max-width: fit-content;
+  color: #eee;
+  text-align: center;
+  margin-bottom: 0;
+}
+
 .message {
   width: 70%;
-  background-color: green;
+  padding: 1rem;
   margin-bottom: 0.3rem;
-  padding: 0.5rem 0.2rem;
+  padding: 0.5rem;
   word-wrap: break-word;
+  letter-spacing: 0.5px;
 }
 
 .message-outgoing {
   align-self: flex-end;
   background-color: var(--primary-color);
+  border-radius: 1rem;
 }
 
 .message-incoming {
   background-color: var(--secondary-color);
+  border-radius: 1rem;
 }
 
 .message-sender {
@@ -185,16 +209,22 @@ onMounted(() => {
 #chat-form {
   display: flex;
   width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+#chat-form input {
+  padding: 1.3rem 1rem;
+  font-size: inherit;
 }
 
 #submit-btn {
   height: 2rem;
-  padding: 0;
-  background-image: url('@/assets/bxs-send.svg');
+  padding: 1rem;
+  background-image: url("@/assets/bxs-send.svg");
   width: 2rem;
   margin-left: 0.2rem;
   cursor: pointer;
-  border-radius: 0;
   overflow: hidden;
 }
 
