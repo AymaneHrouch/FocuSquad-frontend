@@ -1,5 +1,5 @@
 <template>
-  <div class="modal-wraper" v-if="globalStore.showSettings">
+  <form class="modal-wraper" v-if="globalStore.showSettings" @submit="submit">
     <div class="settings-modal">
       <span class="close-btn" @click="globalStore.showSettings = false">&times;</span>
       <h2 class="modal-heading">Settings</h2>
@@ -37,9 +37,9 @@
           />
         </div>
       </div>
-      <span class="btn not-selectable" @click="submit">OK</span>
+      <button class="btn not-selectable" type="submit">OK</button>
     </div>
-  </div>
+  </form>
 </template>
 
 <script setup>
