@@ -1,4 +1,4 @@
-# StudyBuddies
+# FocuSquad
 
 ## Project setup
 Clone the project and run

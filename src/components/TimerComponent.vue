@@ -137,10 +137,11 @@ onMounted(() => {
 
       timerStore.stopped = true;
       timerStore.paused = true;
-      document.title = "Study Buddies";
+      document.title = "FocuSquad";
       playSound();
     }
   });
+
 
   globalStore.socket.on("countdown:paused", () => {
     timerStore.paused = true;
@@ -149,7 +150,7 @@ onMounted(() => {
   globalStore.socket.on("countdown:stopped", () => {
     timerStore.stopped = true;
     timerStore.resting = true;
-    document.title = "Study Buddies";
+    document.title = "FocuSquad";
   });
 });
 

@@ -1,7 +1,7 @@
 <template>
   <main>
     <form class="modal" @submit="submit">
-      <h2>Welcome to Study Buddies</h2>
+      <h2>Welcome to FocuSquad</h2>
       <p>Create or join a study room</p>
       <input autofocus type="text" placeholder="room-name" ref="generator" />
       <span id="generate_room" @click="generateRandomRoom">generate random</span>
