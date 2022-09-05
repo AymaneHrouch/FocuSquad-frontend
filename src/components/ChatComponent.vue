@@ -1,6 +1,6 @@
 <template>
   <Transition :name="timerStore.computedTransition">
-    <div id="chat" v-if="globalStore.showChat && timerStore.resting">
+    <div id="chat" v-if="globalStore.showChat && timerStore.resting" ref="chat">
       <main class="chat-main">
         <div :class="messageClass(message)" v-for="message in messages">
           <div class="message-sender" v-if="message.username && !message.info">
@@ -38,7 +38,7 @@
 </template>
 
 <script setup>
-import { onMounted, reactive, ref, nextTick } from "vue";
+import { onMounted, reactive, ref, nextTick, watch } from "vue";
 
 import { useGlobalStore } from "@s/global";
 import { useSettingsStore } from "@s/settings";
@@ -48,9 +48,17 @@ const globalStore = useGlobalStore();
 const settingsStore = useSettingsStore();
 const timerStore = useTimerStore();
 
+const chat = ref(null);
+
 const messageInput = ref(null);
 
 let messages = reactive([]);
+
+const scrollChat = () => {
+  if (chat.value) {
+    chat.value.querySelector(".chat-main").scrollTo(0, chat.value.scrollHeight);
+  }
+};
 
 const messageClass = (message) => {
   if (message.info) {
@@ -80,8 +88,7 @@ const handleSubmit = async (e) => {
   await nextTick();
 
   // Scroll to the bottom of the chat window
-  const chat = document.querySelector("#chat .chat-main");
-  chat.scrollTo(0, chat.scrollHeight);
+  scrollChat();
 
   // Send message to server
   globalStore.socket.emit("chatMessage", messageInput.value.value);
@@ -89,6 +96,11 @@ const handleSubmit = async (e) => {
   // Clear the input field
   messageInput.value.value = "";
 };
+
+watch(chat, () => {
+  // Scroll to the bottom of the chat window
+  scrollChat();
+});
 
 onMounted(() => {
   globalStore.socket.emit("joinRoom", {
@@ -98,10 +110,6 @@ onMounted(() => {
 
   globalStore.socket.on("message", (msg) => {
     messages.push(msg);
-
-    // Scroll to the bottom of the chat
-    const chat = document.querySelector("#chat .chat-main");
-    chat.scrollTo(0, chat.scrollHeight);
   });
 });
 </script>
