@@ -26,7 +26,9 @@
       </div>
     </div>
     <div class="users">
-      <span class="user" v-for="user in data.users">{{ user }}</span>
+      <span class="user" v-for="user in data.users" :title="user">
+        -{{ user.length > 10 ? user.substr(0, 10) + "..." : user }}
+      </span>
     </div>
   </div>
 </template>
@@ -244,5 +246,14 @@ const playSound = () => {
   display: inline-block;
   height: 0.7rem;
   width: 0.7rem;
+}
+
+@media only screen and (max-width: 900px) {
+  .users {
+    right: 0;
+    left: unset;
+    padding: 0 0 4rem 0;
+    max-width: fit-content;
+  }
 }
 </style>

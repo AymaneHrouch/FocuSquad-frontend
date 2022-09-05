@@ -131,12 +131,6 @@ body {
     padding-top: 9rem;
   }
 
-  .users {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-  }
-
   .timer-options {
     flex-direction: column;
   }

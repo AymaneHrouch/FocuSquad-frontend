@@ -204,6 +204,7 @@ onMounted(() => {
   background: transparent;
   border: none;
   background-color: var(--bg-color);
+  z-index: 2;
 }
 
 #chat-form {
