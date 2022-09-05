@@ -1,17 +1,17 @@
 <template>
   <main>
-    <div class="modal">
+    <form class="modal" @submit="submit">
       <h2>Welcome to Study Buddies</h2>
       <p>Create or join a study room</p>
-      <input type="text" ref="generator" />
+      <input autofocus type="text" placeholder="room-name" ref="generator" />
       <span id="generate_room" @click="generateRandomRoom">generate random</span>
-      <button class="btn" @click="go">Go!!</button>
-    </div>
+      <button class="btn">Go!!</button>
+    </form>
   </main>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref } from "vue";
 
 const generator = ref(null);
 
@@ -21,7 +21,8 @@ const generateRandomRoom = () => {
   generator.value.value = randomString();
 };
 
-const go = () => {
+const submit = e => {
+  e.preventDefault();
   // Redirect to the room
   const room = generator.value.value;
   if (room) {
@@ -58,7 +59,7 @@ main .modal {
   height: 2rem;
   width: 100%;
   font-size: 1.3rem;
-  padding: 0.5rem;
+  padding: 1.2rem;
 }
 
 #generate_room {

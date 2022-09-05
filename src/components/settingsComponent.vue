@@ -6,7 +6,7 @@
       <div class="settings-options">
         <div class="setting-option">
           <label for="username-input">Username</label>
-          <input type="text" id="username-input" :value="settingsStore.username" />
+          <input autofocus type="text" id="username-input" :value="settingsStore.username" />
         </div>
         <div class="setting-option">
           <label for="quote-input" title="Only you can see it">You Personal Quote</label>

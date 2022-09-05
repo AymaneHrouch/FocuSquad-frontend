@@ -4,7 +4,7 @@
       <h3>Welcome!</h3>
       <p>It seems like this is your first time here. Please enter a username.</p>
       <form @submit="submit">
-        <input type="text" v-model="username" />
+        <input autofocus type="text" v-model="username" />
         <button class="btn">OK</button>
       </form>
     </div>
